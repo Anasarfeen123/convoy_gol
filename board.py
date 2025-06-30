@@ -1,4 +1,5 @@
 import numpy as np
+import random
 
 def board_builder(lis:list):
     board = np.full([20,20],"⬛")
@@ -24,3 +25,11 @@ def adj_cell(x,y,map):
             if map[nx, ny] == "⬜":
                 count += 1
     return count
+
+def random_board():
+    l = []
+    for _ in range(10):
+        cell = (random.randint(0,19),random.randint(0,19))
+        l.append(cell)
+    board = board_builder(l)
+    return board
