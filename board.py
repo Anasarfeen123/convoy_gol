@@ -28,7 +28,7 @@ def adj_cell(x,y,map):
 
 def random_board():
     l = []
-    for _ in range(10):
+    for _ in range(30):
         cell = (random.randint(0,19),random.randint(0,19))
         l.append(cell)
     board = board_builder(l)
