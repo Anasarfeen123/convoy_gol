@@ -56,7 +56,8 @@ Make sure board.py and rules.py are in the same directory as main.py.
     Grid resizing
 ---
 ## 📸 Screenshot
-
+![alt text](scrn1.png)
+![alt text](scrn2.png)
 ---
 
 ## 👨‍💻 Author
