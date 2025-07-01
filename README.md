@@ -4,14 +4,14 @@ A full-featured, interactive, and visually clean implementation of Conway’s Ga
 
 ---
 
-## 🔮 Features
+## Features
 
-- 🧠 **Cellular Automation**: Based on Conway's classic rules.
-- 🖱️ **Click-to-Toggle**: Edit the grid with your mouse.
-- ⏸️ **Pause & Resume**: Use `Space` to control simulation.
-- 🎲 **Randomize/Clear**: Press `R` or `C` while paused.
-- 📺 **Fullscreen Adaptive**: Automatically scales and centers the board.
-- 🆘 **In-App Help Panel**: Shows active controls on the right.
+-  **Cellular Automation**: Based on Conway's classic rules.
+-  **Click-to-Toggle**: Edit the grid with your mouse.
+-  **Pause & Resume**: Use `Space` to control simulation.
+-  **Randomize/Clear**: Press `R` or `C` while paused.
+-  **Fullscreen Adaptive**: Automatically scales and centers the board.
+-  **In-App Help Panel**: Shows active controls on the right.
 
 ---
 
@@ -38,14 +38,14 @@ Install using:
 pip install pygame
 ```
 ---
-## 📦 Running the Game
+## Running the Game
 
 ```python main.py```
 
 Make sure board.py and rules.py are in the same directory as main.py.
 
 ---
-## 💡 Future Ideas
+## Future Ideas
 
     Save/load patterns
 
@@ -60,10 +60,10 @@ Make sure board.py and rules.py are in the same directory as main.py.
 ![alt text](scrn2.png)
 ---
 
-## 👨‍💻 Author
+## 👨‍💻 ⸮ Who made this ?
 
 Developed by **Anas Arfeen**
-Powered by Python 🐍 + Pygame 🎮
+Powered by Python + Pygame
 
 
 ---
