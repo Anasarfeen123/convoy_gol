@@ -1,8 +1,8 @@
 import numpy as np
 import random
 
-def board_builder(lis:list):
-    board = np.full([20,20],"⬛")
+def board_builder(lis:list,size=20):
+    board = np.full([size,size],"⬛")
     for i in lis:
         add_cells(i[0],i[1],board)
     return board
@@ -26,10 +26,9 @@ def adj_cell(x,y,map):
                 count += 1
     return count
 
-def random_board():
-    l = []
-    for _ in range(30):
-        cell = (random.randint(0,19),random.randint(0,19))
-        l.append(cell)
-    board = board_builder(l)
-    return board
+def random_board(size=20, count=30):
+    cells = set()
+    while len(cells) < count:
+        cell = (random.randint(0, size - 1), random.randint(0, size - 1))
+        cells.add(cell)
+    return board_builder(list(cells), size)
