@@ -22,7 +22,7 @@ help_lines = [
 "Esc   - Quit",
 "Space - Play / Pause",
 "Click - Toggle cell",
-"1-7   - Change rule",
+"1-8   - Change rule",
 "When paused:",
 "   R - Randomize board",
 "   C - Clear board"
@@ -37,7 +37,15 @@ screen.fill(BGCOLOR)
 def board_drawer(map, screen):
     for row in range(len(map)):
         for col in range(len(map[0])):
-            color = (255, 255, 255) if map[row][col] == "⬜" else (0, 0, 0)
+            if map[row][col] == "⬜":
+                a = age[row][col]
+                r = min(255, a * 20)
+                g = max(255, 255 - a * 10)
+                b = min(255, 100)
+                color = (r, g, b)
+            else:
+                color = (0, 0, 0)
+
             x = col * CELL_SIZE + OFFSET[0]
             y = row * CELL_SIZE + OFFSET[1]
             gui.draw.rect(screen, color, gui.Rect(x, y, CELL_SIZE, CELL_SIZE))
@@ -49,7 +57,7 @@ def board_drawer(map, screen):
         y = OFFSET[1] + j * CELL_SIZE
         gui.draw.line(screen, (60, 60, 60), (OFFSET[0], y), (OFFSET[0] + BOARD_WIDTH_HEIGHT[0], y))
 
-
+age = np.zeros(BOARD_DIMENSIONS, dtype=int)
 if __name__ == "__main__":
     running = True
     paused = True
@@ -93,19 +101,41 @@ if __name__ == "__main__":
                     grid_y = (my - OFFSET[1]) // CELL_SIZE
                     if 0 <= grid_x < BOARD_DIMENSIONS[0] and 0 <= grid_y < BOARD_DIMENSIONS[1]:
                         board[grid_y][grid_x] = "⬛" if board[grid_y][grid_x] == "⬜" else "⬜"
+                    if 0 <= grid_x < BOARD_DIMENSIONS[0] and 0 <= grid_y < BOARD_DIMENSIONS[1]:
+                        if board[grid_y][grid_x] == "⬜":
+                            board[grid_y][grid_x] = "⬛"
+                            age[grid_y][grid_x] = 0
+                        else:
+                            board[grid_y][grid_x] = "⬜"
+                            age[grid_y][grid_x] = 1  # or 0 if you want born-next-tick vibe
                 
                 if event.type == gui.KEYDOWN and paused:
                     if event.key == gui.K_r:
                         board = bd.random_board(BOARD_DIMENSIONS[0], count=100)
+                        age[:] = 0
+
                     if event.key == gui.K_c:
                         board = bd.board_builder([], BOARD_DIMENSIONS[0])
+                        age[:] = 0
             
             if not paused:
                 label = font.render(f"{TITLE} [{RULE}] – Generation {gen}", True, (255, 255, 255))
-                board_y = rls.rule_check(board, RULE)
-                if np.array_equal(board, board_y):
+                
+                board_next = rls.rule_check(board, RULE)
+
+                for y in range(BOARD_DIMENSIONS[1]):
+                    for x in range(BOARD_DIMENSIONS[0]):
+                        if board_next[y][x] == "⬜":
+                            if board[y][x] == "⬜":
+                                age[y][x] += 1      # survived
+                            else:
+                                age[y][x] = 1       # born
+                        else:
+                            age[y][x] = 0           # dead
+
+                if np.array_equal(board, board_next):
                     paused = True
-                board = board_y
+                board = board_next
                 screen.fill(BGCOLOR)
                 
                 board_drawer(board, screen)
