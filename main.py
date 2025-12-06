@@ -1,6 +1,5 @@
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
-
 import numpy as np
 import time
 import board as bd
@@ -50,12 +49,8 @@ def board_drawer(map, screen):
 if __name__ == "__main__":
     running = True
     paused = True
-    
-    # initial_live_cells = [[10,9], [10,10], [10,11]]
     initial_live_cells = [[1,2], [2,3], [3,1], [3,2], [3,3]]
     board = bd.board_builder(initial_live_cells,BOARD_DIMENSIONS[0])
-    
-    # board = bd.random_board()
     
     board_drawer(board,screen)
     time.sleep(1)
