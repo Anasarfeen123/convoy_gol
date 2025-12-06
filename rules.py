@@ -1,68 +1,31 @@
 import board as bd
 
-def rule_check(map, rule ="gol"):
-    '''
-    Any live cell with fewer than two live neighbours dies, as if by underpopulation.
-    Any live cell with two or three live neighbours lives on to the next generation.
-    Any live cell with more than three live neighbours dies, as if by overpopulation.
-    Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
-    '''
-    rows, cols = map.shape
-    ex_map = map.copy()
-    for x in range(0,rows):
-        for y in range(0,cols):
-            neighbors = bd.adj_cell(x, y, map)
-            if rule=="gol":
-                if map[x, y] == "⬛" and neighbors == 3:
-                    ex_map[x, y] = "⬜"
+RULES = {
+    "gol":              ( {3},          {2, 3} ),
+    "HighLife":         ( {3, 6},       {2, 3} ),
+    "DaynNight":        ( {3, 6, 7, 8}, {3, 4, 6, 7, 8} ),
+    "seed":             ( {2},          set() ),
+    "life_without_death": ({3},         set(range(9)) ),
+    "Maze":             ( {3},          {1, 2, 3, 4, 5} ),
+    "Replicator":       ( {1, 3, 5, 7}, {1, 3, 5, 7} ),
+    "34":               ( {3, 4},       {3, 4} ),
+}
 
-                elif map[x, y] == "⬜":
-                    if neighbors < 2 or neighbors > 3:
-                        ex_map[x, y] = "⬛"
-            
-            elif rule=="HighLife":
-                if map[x, y] == "⬛" and (neighbors in [3, 6]) :
-                    ex_map[x, y] = "⬜"
-                elif map[x, y] == "⬜":
-                    if neighbors < 2 or neighbors > 3:
-                        ex_map[x, y] = "⬛"
-            
-            elif rule=="DaynNight":
-                if map[x, y] == "⬛" and (neighbors in [3,6,7,8]) :
-                    ex_map[x, y] = "⬜"
-                elif map[x, y] == "⬜":
-                    if neighbors not in [3,4,6,7,8]:
-                        ex_map[x, y] = "⬛"
-            
-            elif rule=="seed":
-                if map[x, y] == "⬛" and neighbors == 2:
-                    ex_map[x, y] = "⬜"
-                elif map[x, y] == "⬜":
-                    ex_map[x, y] = "⬛"
-            
-            elif rule=="life_without_death":
-                if map[x, y] == "⬛" and neighbors == 3:
-                    ex_map[x, y] = "⬜"
-            
-            elif rule=="Maze":
-                if map[x, y] == "⬛" and (neighbors in [3]) :
-                    ex_map[x, y] = "⬜"
-                elif map[x, y] == "⬜":
-                    if neighbors not in [1,2,3,4,5]:
-                        ex_map[x, y] = "⬛"
-            
-            elif rule=="Replicator":
-                if map[x, y] == "⬛" and (neighbors in [1,3,5,7]) :
-                    ex_map[x, y] = "⬜"
-                elif map[x, y] == "⬜":
-                    if neighbors not in [1,3,7,5]:
-                        ex_map[x, y] = "⬛"
-            
-            elif rule=="34":
-                if map[x, y] == "⬛" and (neighbors in [3,4]) :
-                    ex_map[x, y] = "⬜"
-                elif map[x, y] == "⬜":
-                    if neighbors not in [3,4]:
-                        ex_map[x, y] = "⬛"
-            
-    return ex_map
+DEAD = "⬛"
+ALIVE = "⬜"
+def rule_check(grid, rule="gol"):
+    rows, cols = grid.shape
+    new_grid = grid.copy()
+    birth, survive = RULES[rule]
+
+    for x in range(rows):
+        for y in range(cols):
+            n = bd.adj_cell(x, y, grid)
+            cell = grid[x, y]
+
+            if cell == DEAD and n in birth:
+                new_grid[x, y] = ALIVE
+            elif cell == ALIVE and n not in survive:
+                new_grid[x, y] = DEAD
+
+    return new_grid

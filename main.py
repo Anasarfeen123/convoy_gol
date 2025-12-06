@@ -5,12 +5,12 @@ import time
 import board as bd
 import rules as rls
 import pygame as gui
-
 gui.init()
 gui.font.init()
 font = gui.font.SysFont(None, 36)
 info = gui.display.Info()
 
+RULE = "gol"
 TITLE = "Conway's game of life"
 CELL_SIZE = 20
 BOARD_DIMENSIONS = (50,50)
@@ -19,11 +19,15 @@ SCREEN_WIDTH_HEIGHT = (info.current_w, info.current_h)
 OFFSET = ((SCREEN_WIDTH_HEIGHT[0] - BOARD_WIDTH_HEIGHT[0]) // 2,(SCREEN_WIDTH_HEIGHT[1] - BOARD_WIDTH_HEIGHT[1]) // 2)
 BGCOLOR = (40,40,40)
 help_lines = [
-"Esc - Quit",
+"Esc   - Quit",
+"Space - Play / Pause",
+"Click - Toggle cell",
+"1-7   - Change rule",
 "When paused:",
-"       R - Randomize board",
-"       C - Clear board"
+"   R - Randomize board",
+"   C - Clear board"
 ]
+
 label_help_x = SCREEN_WIDTH_HEIGHT[0] - 300
 
 screen = gui.display.set_mode(SCREEN_WIDTH_HEIGHT, gui.FULLSCREEN)
@@ -64,6 +68,24 @@ if __name__ == "__main__":
                 
                 if event.type == gui.KEYDOWN and event.key == gui.K_SPACE:
                     paused = not paused
+                if event.type == gui.KEYDOWN:
+                    if event.key == gui.K_1:
+                        RULE = "gol"
+                    elif event.key == gui.K_2:
+                        RULE = "HighLife"
+                    elif event.key == gui.K_3:
+                        RULE = "DaynNight"
+                    elif event.key == gui.K_4:
+                        RULE = "seed"
+                    elif event.key == gui.K_5:
+                        RULE = "life_without_death"
+                    elif event.key == gui.K_6:
+                        RULE = "Maze"
+                    elif event.key == gui.K_7:
+                        RULE = "Replicator"
+                    elif event.key == gui.K_8:
+                        RULE = "34"
+                        
                 
                 if event.type == gui.MOUSEBUTTONDOWN and paused:
                     mx, my = gui.mouse.get_pos()
@@ -79,8 +101,8 @@ if __name__ == "__main__":
                         board = bd.board_builder([], BOARD_DIMENSIONS[0])
             
             if not paused:
-                label = font.render(f"Running - Generation {gen}", True, (255, 255, 255))
-                board_y = rls.rule_check(board)
+                label = font.render(f"{TITLE} [{RULE}] – Generation {gen}", True, (255, 255, 255))
+                board_y = rls.rule_check(board, RULE)
                 if np.array_equal(board, board_y):
                     paused = True
                 board = board_y
@@ -88,7 +110,7 @@ if __name__ == "__main__":
                 
                 board_drawer(board, screen)
                 
-                gui.display.set_caption(TITLE + f" – Generation {gen}")
+                gui.display.set_caption(f"{TITLE} [{RULE}] – Generation {gen}")
                 gen += 1
                 
                 screen.blit(label, (20, 20))
@@ -101,7 +123,7 @@ if __name__ == "__main__":
                 gui.time.delay(150)
 
             if paused:
-                board_y = rls.rule_check(board)
+                board_y = rls.rule_check(board, RULE)
                 if np.array_equal(board, board_y):
                     label = font.render(f"Last Generation {gen}", True, (255, 255, 255))
                 else:
