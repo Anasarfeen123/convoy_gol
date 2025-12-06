@@ -1,5 +1,4 @@
 import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import numpy as np
 import time
 import board as bd
@@ -9,6 +8,7 @@ gui.init()
 gui.font.init()
 font = gui.font.SysFont(None, 36)
 info = gui.display.Info()
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
 RULE = "gol"
 TITLE = "Conway's game of life"
@@ -39,9 +39,9 @@ def board_drawer(map, screen):
         for col in range(len(map[0])):
             if map[row][col] == "⬜":
                 a = age[row][col]
-                r = min(255, a * 20)
+                r = min(255, 100 + a * 90)
                 g = max(255, 255 - a * 10)
-                b = min(255, 100)
+                b = min(255, a*30)
                 color = (r, g, b)
             else:
                 color = (0, 0, 0)
