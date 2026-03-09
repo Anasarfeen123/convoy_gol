@@ -99,16 +99,14 @@ if __name__ == "__main__":
                     mx, my = gui.mouse.get_pos()
                     grid_x = (mx - OFFSET[0]) // CELL_SIZE
                     grid_y = (my - OFFSET[1]) // CELL_SIZE
-                    if 0 <= grid_x < BOARD_DIMENSIONS[0] and 0 <= grid_y < BOARD_DIMENSIONS[1]:
-                        board[grid_y][grid_x] = "⬛" if board[grid_y][grid_x] == "⬜" else "⬜"
+                    
                     if 0 <= grid_x < BOARD_DIMENSIONS[0] and 0 <= grid_y < BOARD_DIMENSIONS[1]:
                         if board[grid_y][grid_x] == "⬜":
                             board[grid_y][grid_x] = "⬛"
                             age[grid_y][grid_x] = 0
                         else:
                             board[grid_y][grid_x] = "⬜"
-                            age[grid_y][grid_x] = 1  # or 0 if you want born-next-tick vibe
-                
+                            age[grid_y][grid_x] = 1
                 if event.type == gui.KEYDOWN and paused:
                     if event.key == gui.K_r:
                         board = bd.random_board(BOARD_DIMENSIONS[0], count=100)
